@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "summary here if publishing"
   spec.description   = "description here if publishing"
-  spec.homepage      = "website ''"
+  spec.homepage      = "https://github.com/Tsunamins/miami_venues"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
