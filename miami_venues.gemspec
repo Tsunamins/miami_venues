@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "public repo"
+    spec.metadata["source_code_uri"] = "git@github.com:Tsunamins/miami_venues.git"
     spec.metadata["changelog_uri"] = "some changes here"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
