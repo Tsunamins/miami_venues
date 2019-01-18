@@ -1,0 +1,12 @@
+
+#needs to require certain files:
+#!/usr/bin/env ruby
+#other files have .rb which specifes a ruby file so this first line tells working in ruby
+
+require_relative '../lib/miami_venues'
+
+
+#basic call to cli class to check if setup correct
+
+x = MiamiVenues::CLI.new
+x.start
