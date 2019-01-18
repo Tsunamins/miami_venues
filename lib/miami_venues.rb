@@ -1,6 +1,9 @@
-require "miami_venues/version"
+#original opening default
+#require "miami_venues/version"
+#a note below on what this file is equivalent to in labs
+#file created is an equivalent to environment.rb
 
-module MiamiVenues
-  class Error < StandardError; end
-  # Your code goes here...
-end
+
+
+require_relative "miami_venues/version"
+require_relative "miami_venues/cli"
