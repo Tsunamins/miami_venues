@@ -11,5 +11,8 @@ require_relative '../lib/miami_venues'
 x = MiamiVenues::CLI.new
 x.start
 
-MiamiVenues::Scraper.new 
+y = MiamiVenues::Scraper.new 
+y.arsht_events
+
+
 
