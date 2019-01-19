@@ -2,16 +2,16 @@ require 'open-uri'
 require 'pry'
 require 'nokogiri'
 
-class Scraper
+class MiamiVenues::Scraper
   attr_accessor :events
   @events = []
 
   def arsht_events
     events = Nokogiri::HTML(open("http://learn-co-curriculum.github.io/site-for-scraping/courses"))
-    
-    
+
+
     events.css("ul#eventlist")
-    
+
   end
 
 
