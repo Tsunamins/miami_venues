@@ -7,10 +7,12 @@ class MiamiVenues::Scraper
   @events = []
 
   def arsht_events
+   
     events = Nokogiri::HTML(open("http://learn-co-curriculum.github.io/site-for-scraping/courses"))
 
     
-    events.css("ul#eventlist")
+    puts events.css("ul#eventlist")
+    
 
   end
 
