@@ -4,12 +4,13 @@
 
 
 class MiamiVenues::CLI
-
+  attr_accessor :arsht_events
   #code to see if all is setup correctly
   #called in bin findjobs to initially check
   def start
     puts "Hello"
-
+    
+    
     #example of calling scraper method within here:
     #MiamiVenues::Scraper.scrape
   end
