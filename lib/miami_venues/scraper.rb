@@ -54,8 +54,9 @@ def change_date_format(date_range)
     end
       return date_array
     elsif date_range.include?(" at ")
-      date_only.chomp(' at 7:00 PM')
-      match_date_format = date_only.strftime('%a %d %b %Y')
+      date_only = date_range.chomp(' at 7:00 PM')
+      new_format = DateTime.parse("#{date_only}")
+      match_date_format = new_format.strftime('%a %d %b %Y')
       return match_date_format
     elsif
       date_range.include?("-") == false
@@ -69,26 +70,35 @@ def change_date_format(date_range)
 
   def sci_museum_laser_fridays
       laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
-      event_hash = {}
+      event_hash = {:event_name => "", :date => "", :url => ""}
       laser_date = ""
+      arrayed_dates = []
+      stored_hashes = []
 
-
-      laser_fridays.css("div.centering-container").each do |find_date|
-        laser_date = find_date.css("p.subtitle1").text
+      laser_fridays.css("div.centering-container p.subtitle1").each do |find_date|
+        laser_date = find_date.text
+        arrayed_dates << change_date_format(laser_date)
       end
 
       laser_fridays.css("div.centering-container h2").each do |find_detail|
-
-
-
-        event_hash = {:event_name => "Laser Fridays",
-          :date => change_date_format(laser_date),
+          event_hash = {:event_name => "Laser Fridays",
             :url => find_detail.css("a").attribute("href").value}
-
-            @@events << event_hash
+          stored_hashes << event_hash
       end
-      #puts events for now, later print/return events in another method after date changed
+
+      i = 0
+      while i < arrayed_dates.length
+        stored_hashes[i][:date] = arrayed_dates[i]
+        i += 1
+      end
+
+
+      @@events << stored_hashes
+      @@events.flatten
       puts @@events
+
+      #puts events for now, later print/return events in another method after date changed
+      #puts @@events
     end
 
 
