@@ -12,44 +12,75 @@ require 'date'
 
 
 class MiamiVenues::Scraper
-   attr_accessor :events
+   attr_accessor :events, :event_hash
   #not sure, but maybe have keys in advance for order, but maybe not necessary
   #events = [{:event_name => "", :date => [], :time => "", :url => "", :description => ""}]
-  @events = []
-  event_hash = {}
+  @@events = []
 
 def perez_art_list
+  #@events = []
+  event_hash = {}
   perez_a = Nokogiri::HTML(open("https://www.pamm.org/calendar"))
 
   #find title of event, dates and url
 
   perez_a.css("li div.inner").each do |find_detail|
-    incoming_date = find_detail.css("span.meta").text
     event_hash = {:event_name => find_detail.css("h4").text,
-      :date => perez_dates(incoming_date),
+      :date => find_detail.css("span.meta").text,
       :url => find_detail.css("a").attribute("href").value}
 
-      @events << event_hash
+      @@events << event_hash
+
   end
-  puts @events #later return value
+  #puts events for now, later print/return events in another method after date changed
+
+
+
 end
 
-def perez_dates(in_date)
-  find_date = events[:date]
-  find_date.each do |date|
-    if date.include?("-")
-      date.split("-")
-      first_day = date[0]
-      last_day = date[1]
-      date_range = first_day..last_day
+#first part of if statemtn works but changes ev thing to dates in @@events
+#so have to go back through and prob keep dates separate then input this
+#modified date finding and formatting method into perez art list above
+#so keep this as an example but make a new perez_get_and_process dates or someting method
+
+def perez_dates
+  i = 0
+  date_array = []
+  date_string = ""
+  while i < @@events.length
+    find_date = @@events[i][:date]
+    i += 1
+    if find_date.include?("-")
+
+      arrayed_date = find_date.split(" - ")
+
+      first_day = arrayed_date[0]
+      last_day = arrayed_date[1]
+      first_day.strip!
+      last_day.strip!
+
+      #binding.pry
+
+      first_day_format = DateTime.parse("#{first_day}")
+      last_day_format = DateTime.parse("#{last_day}")
+      date_range = first_day_format..last_day_format
       date_range.to_a
       date_range.each do |change_format|
-        return change_format.strftime('%a %d %b %Y')
+        date_array << change_format.strftime('%a %d %b %Y')
+
       end
-    elsif date.include?("-") == false
-      return date.strftime('%a %d %b %Y')
+      @@events[i][:date] = date_array
+      binding.pry
+    elsif find_date.include?("-") == false
+      date_format = Date.parse("#{find_date}")
+      match_date_format = date_format.strftime('%a %d %b %Y')
+      @@events[i][:date] =  match_date_format
+
     end
+
+
     end
+    puts @@events
   end
 
 #   def sci_museum_laser_fridays
