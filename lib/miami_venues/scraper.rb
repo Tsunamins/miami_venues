@@ -30,6 +30,7 @@ def perez_art_list
       events[:date] = perez_dates(incoming_date)
 
   end
+
 end
 
 def perez_dates(in_date)
@@ -53,17 +54,15 @@ def perez_dates(in_date)
   def sci_museum_laser_fridays
       laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
 
+      laser_fridays.css("div.centering-container h2").each do |url|
+        events[:url] = url.css("a").attribute("href").value
+      end
 
-
-  end
-
-
-
-
-
-
-
-
+      laser_fridays.css("div.centering-container").each do |dates|
+      events[:date] = dates.css("p.subtitle1").text
+      events[:description] = desc.css("p.body_text4").text
+    end
+end
 
 
 end
