@@ -12,10 +12,11 @@ require 'date'
 
 
 class MiamiVenues::Scraper
-  # attr_accessor :events
+   attr_accessor :events
   #not sure, but maybe have keys in advance for order, but maybe not necessary
-  events = [{:event_name => "", :date => [], :time => "", :url => "", :description => ""}]
-
+  #events = [{:event_name => "", :date => [], :time => "", :url => "", :description => ""}]
+  @events = []
+  event_hash = {}
 
 def perez_art_list
   perez_a = Nokogiri::HTML(open("https://www.pamm.org/calendar"))
@@ -23,14 +24,14 @@ def perez_art_list
   #find title of event, dates and url
 
   perez_a.css("li div.inner").each do |find_detail|
-    events[:event_name] = find_detail.css("h4").text
+    incoming_date = find_detail.css("span.meta").text
+    event_hash = {:event_name => find_detail.css("h4").text,
+      :date => perez_dates(incoming_date),
+      :url => find_detail.css("a").attribute("href").value}
 
-      events[:url] = find_detail.css("a").attribute("href").value
-      incoming_date = find_detail.css("span.meta").text
-      events[:date] = perez_dates(incoming_date)
-
+      @events << event_hash
   end
-
+  puts @events #later return value
 end
 
 def perez_dates(in_date)
@@ -51,18 +52,18 @@ def perez_dates(in_date)
     end
   end
 
-  def sci_museum_laser_fridays
-      laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
-
-      laser_fridays.css("div.centering-container h2").each do |url|
-        events[:url] = url.css("a").attribute("href").value
-      end
-
-      laser_fridays.css("div.centering-container").each do |dates|
-      events[:date] = dates.css("p.subtitle1").text
-      events[:description] = desc.css("p.body_text4").text
-    end
-end
+#   def sci_museum_laser_fridays
+#       laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
+#
+#       laser_fridays.css("div.centering-container h2").each do |url|
+#         event_hash[:url] = url.css("a").attribute("href").value
+#       end
+#
+#       laser_fridays.css("div.centering-container").each do |dates|
+#       event_hash[:date] = dates.css("p.subtitle1").text
+#       event_hash[:description] = desc.css("p.body_text4").text
+#     end
+# end
 
 
 end
