@@ -25,15 +25,16 @@ def perez_art_list
   #find title of event, dates and url
 
   perez_a.css("li div.inner").each do |find_detail|
+    indiv_date = find_detail.css("span.meta").text
     event_hash = {:event_name => find_detail.css("h4").text,
-      :date => find_detail.css("span.meta").text,
+      :date => change_date_format(indiv_date),
       :url => find_detail.css("a").attribute("href").value}
 
       @@events << event_hash
 
   end
   #puts events for now, later print/return events in another method after date changed
-
+  puts @@events
 
 
 end
@@ -42,6 +43,30 @@ end
 #so have to go back through and prob keep dates separate then input this
 #modified date finding and formatting method into perez art list above
 #so keep this as an example but make a new perez_get_and_process dates or someting method
+
+def change_date_format(date_range)
+  date_array = []
+  if date_range.include?("-")
+    arrayed_date = date_range.split("-")
+    first_day = arrayed_date[0]
+    last_day = arrayed_date[1]
+    first_day.strip!
+    last_day.strip!
+    first_day_format = DateTime.parse("#{first_day}")
+    last_day_format = DateTime.parse("#{last_day}")
+    date_range = first_day_format..last_day_format
+    date_range.to_a
+    date_range.each do |change_format|
+      date_array << change_format.strftime('%a %d %b %Y')
+    end
+      return date_array
+    elsif
+      date_range.include?("-") == false
+      date_format = DateTime.parse("#{date_range}")
+      match_date_format = date_format.strftime('%a %d %b %Y')
+      return match_date_format
+    end
+  end
 
 def perez_dates
   i = 0
@@ -70,7 +95,7 @@ def perez_dates
 
       end
       @@events[i][:date] = date_array
-      binding.pry
+      #binding.pry
     elsif find_date.include?("-") == false
       date_format = Date.parse("#{find_date}")
       match_date_format = date_format.strftime('%a %d %b %Y')
@@ -80,7 +105,7 @@ def perez_dates
 
 
     end
-    puts @@events
+
   end
 
 #   def sci_museum_laser_fridays
@@ -98,3 +123,7 @@ def perez_dates
 
 
 end
+
+# event_hash = {:event_name => find_detail.css("h4").text,
+#   :date => find_detail.css("span.meta").text,
+#   :url => find_detail.css("a").attribute("href").value}
