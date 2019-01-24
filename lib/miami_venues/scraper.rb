@@ -12,13 +12,13 @@ require 'date'
 
 
 class MiamiVenues::Scraper
-
+            attr_accessor :perez_events, :laser_events
   #not sure, but maybe have keys in advance for order, but maybe not necessary
   #events = [{:event_name => "", :date => [], :time => "", :url => "", :description => ""}]
   @@events = []
 
 def perez_art_list
-  #@events = []
+  @perez_events = []
   event_hash = {}
   perez_a = Nokogiri::HTML(open("https://www.pamm.org/calendar"))
 
@@ -30,11 +30,11 @@ def perez_art_list
       :date => change_date_format(indiv_date),
       :url => find_detail.css("a").attribute("href").value}
 
-      @@events << event_hash
+      @perez_events << event_hash
 
   end
   #puts events for now, later print/return events in another method after date changed
-  puts @@events
+  puts @perez_events
 end
 
 def change_date_format(date_range)
@@ -74,6 +74,7 @@ def change_date_format(date_range)
       laser_date = ""
       arrayed_dates = []
       stored_hashes = []
+      @laser_events = []
 
       laser_fridays.css("div.centering-container p.subtitle1").each do |find_date|
         laser_date = find_date.text
@@ -93,9 +94,9 @@ def change_date_format(date_range)
       end
 
 
-      @@events << stored_hashes
-      @@events.flatten
-      puts @@events
+      @laser_events << stored_hashes
+      @laser_events.flatten
+      puts @laser_events
 
       #puts events for now, later print/return events in another method after date changed
       #puts @@events
