@@ -12,7 +12,7 @@ require 'date'
 
 
 class MiamiVenues::Scraper
-   attr_accessor :events, :event_hash
+
   #not sure, but maybe have keys in advance for order, but maybe not necessary
   #events = [{:event_name => "", :date => [], :time => "", :url => "", :description => ""}]
   @@events = []
@@ -35,14 +35,7 @@ def perez_art_list
   end
   #puts events for now, later print/return events in another method after date changed
   puts @@events
-
-
 end
-
-#first part of if statemtn works but changes ev thing to dates in @@events
-#so have to go back through and prob keep dates separate then input this
-#modified date finding and formatting method into perez art list above
-#so keep this as an example but make a new perez_get_and_process dates or someting method
 
 def change_date_format(date_range)
   date_array = []
@@ -54,76 +47,49 @@ def change_date_format(date_range)
     last_day.strip!
     first_day_format = DateTime.parse("#{first_day}")
     last_day_format = DateTime.parse("#{last_day}")
-    date_range = first_day_format..last_day_format
-    date_range.to_a
-    date_range.each do |change_format|
+    all_dates = first_day_format..last_day_format
+    all_dates.to_a
+    all_dates.each do |change_format|
       date_array << change_format.strftime('%a %d %b %Y')
     end
       return date_array
+    elsif date_range.include?(" at ")
+      date_only.chomp(' at 7:00 PM')
+      match_date_format = date_only.strftime('%a %d %b %Y')
+      return match_date_format
     elsif
       date_range.include?("-") == false
-      date_format = DateTime.parse("#{date_range}")
+      date_format = Date.parse("#{date_range}")
       match_date_format = date_format.strftime('%a %d %b %Y')
       return match_date_format
     end
   end
 
-def perez_dates
-  i = 0
-  date_array = []
-  date_string = ""
-  while i < @@events.length
-    find_date = @@events[i][:date]
-    i += 1
-    if find_date.include?("-")
 
-      arrayed_date = find_date.split(" - ")
 
-      first_day = arrayed_date[0]
-      last_day = arrayed_date[1]
-      first_day.strip!
-      last_day.strip!
+  def sci_museum_laser_fridays
+      laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
+      event_hash = {}
+      laser_date = ""
 
-      #binding.pry
 
-      first_day_format = DateTime.parse("#{first_day}")
-      last_day_format = DateTime.parse("#{last_day}")
-      date_range = first_day_format..last_day_format
-      date_range.to_a
-      date_range.each do |change_format|
-        date_array << change_format.strftime('%a %d %b %Y')
-
+      laser_fridays.css("div.centering-container").each do |find_date|
+        laser_date = find_date.css("p.subtitle1").text
       end
-      @@events[i][:date] = date_array
-      #binding.pry
-    elsif find_date.include?("-") == false
-      date_format = Date.parse("#{find_date}")
-      match_date_format = date_format.strftime('%a %d %b %Y')
-      @@events[i][:date] =  match_date_format
 
+      laser_fridays.css("div.centering-container h2").each do |find_detail|
+
+
+
+        event_hash = {:event_name => "Laser Fridays",
+          :date => change_date_format(laser_date),
+            :url => find_detail.css("a").attribute("href").value}
+
+            @@events << event_hash
+      end
+      #puts events for now, later print/return events in another method after date changed
+      puts @@events
     end
-
-
-    end
-
-  end
-
-#   def sci_museum_laser_fridays
-#       laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
-#
-#       laser_fridays.css("div.centering-container h2").each do |url|
-#         event_hash[:url] = url.css("a").attribute("href").value
-#       end
-#
-#       laser_fridays.css("div.centering-container").each do |dates|
-#       event_hash[:date] = dates.css("p.subtitle1").text
-#       event_hash[:description] = desc.css("p.body_text4").text
-#     end
-# end
 
 
 end
-
-# event_hash = {:event_name => find_detail.css("h4").text,
-#   :date => find_detail.css("span.meta").text,
-#   :url => find_detail.css("a").attribute("href").value}
