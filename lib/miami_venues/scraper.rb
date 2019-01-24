@@ -1,10 +1,20 @@
 require 'open-uri'
 require 'pry'
 require 'nokogiri'
+require 'date'
+
+#note where appropriate or where intersted add a default location
+#i.e. laser fridays are always at frost planetarium so by default at
+#frost planetarium
+#some have time some don't, i.e. later fridays usually at 7:00
+#laser fridays also provides a small description of that weeks laser show
+#so need description category also
+
 
 class MiamiVenues::Scraper
   # attr_accessor :events
-  events = []
+  #not sure, but maybe have keys in advance for order, but maybe not necessary
+  events = [{:event_name => "", :date => [], :time => "", :url => "", :description => ""}]
 
 
 def perez_art_list
@@ -13,15 +23,16 @@ def perez_art_list
   #find title of event, dates and url
 
   perez_a.css("li div.inner").each do |find_detail|
-    events = {:event_name => find_detail.css("h4").text,
-      :date => [find_detail.css("span.meta").text],
-      :url => find_detail.css("a").attribute("href").value}
+    events[:event_name] = find_detail.css("h4").text
+
+      events[:url] = find_detail.css("a").attribute("href").value
+      incoming_date = find_detail.css("span.meta").text
+      events[:date] = perez_dates(incoming_date)
+
   end
 end
 
-puts events
-
-def standard_date
+def perez_dates(in_date)
   find_date = events[:date]
   find_date.each do |date|
     if date.include?("-")
@@ -31,12 +42,19 @@ def standard_date
       date_range = first_day..last_day
       date_range.to_a
       date_range.each do |change_format|
-        change_format.strftime('%a %d %b %Y')
+        return change_format.strftime('%a %d %b %Y')
       end
     elsif date.include?("-") == false
-      date.strftime('%a %d %b %Y')
+      return date.strftime('%a %d %b %Y')
     end
     end
+  end
+
+  def sci_museum_laser_fridays
+      laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
+
+
+
   end
 
 
