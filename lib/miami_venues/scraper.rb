@@ -45,6 +45,7 @@ def change_date_format(date_range)
     first_day.strip!
     last_day.strip!
     first_day_format = DateTime.parse("#{first_day}")
+
     last_day_format = DateTime.parse("#{last_day}")
     all_dates = first_day_format..last_day_format
     all_dates.to_a
@@ -100,7 +101,7 @@ def change_date_format(date_range)
       return @laser_events
     end
 
-  
+
 
 
 
