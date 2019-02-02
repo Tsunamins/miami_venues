@@ -3,19 +3,11 @@ require 'pry'
 require 'nokogiri'
 require 'date'
 
-#note where appropriate or where intersted add a default location
-#i.e. laser fridays are always at frost planetarium so by default at
-#frost planetarium
-#some have time some don't, i.e. later fridays usually at 7:00
-#laser fridays also provides a small description of that weeks laser show
-#so need description category also
+
 
 
 class MiamiVenues::Scraper
-            attr_accessor :perez_events, :laser_events
-  #not sure, but maybe have keys in advance for order, but maybe not necessary
-  #events = [{:event_name => "", :date => [], :time => "", :url => "", :description => ""}]
-  @@events = []
+          attr_accessor :perez_events, :laser_events
 
 def perez_art_list
   @perez_events = []
@@ -28,9 +20,7 @@ def perez_art_list
     event_hash = {:event_name => find_detail.css("h4").text,
       :date => change_date_format(indiv_date),
       :url => find_detail.css("a").attribute("href").value}
-
       @perez_events << event_hash
-
   end
 
   i = 0
@@ -40,9 +30,7 @@ def perez_art_list
     i += 1
   end
 
-  puts @perez_events
-  #puts events for now, later print/return events in another method after date changed
-  #return @perez_events
+  return @perez_events
 
 end
 
@@ -107,13 +95,12 @@ def change_date_format(date_range)
         i += 1
       end
 
-
       @laser_events << stored_hashes
       @laser_events.flatten
-      puts @laser_events
-      #puts events for now, later print/return events in another method after date changed
-      #puts @@events
+      return @laser_events
     end
+
+  
 
 
 
