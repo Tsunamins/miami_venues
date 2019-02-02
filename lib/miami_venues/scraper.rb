@@ -23,7 +23,6 @@ def perez_art_list
   perez_a = Nokogiri::HTML(open("https://www.pamm.org/calendar"))
 
   #find title of event, dates and url
-
   perez_a.css("li div.inner").each do |find_detail|
     indiv_date = find_detail.css("span.meta").text
     event_hash = {:event_name => find_detail.css("h4").text,
@@ -33,10 +32,22 @@ def perez_art_list
       @perez_events << event_hash
 
   end
-  #puts events for now, later print/return events in another method after date changed
+
+  i = 0
+  #standardize web url
+  while i < @perez_events.length
+    @perez_events[i][:url].prepend("https://www.pamm.org")
+    i += 1
+  end
+
   puts @perez_events
+  #puts events for now, later print/return events in another method after date changed
+  #return @perez_events
+
 end
 
+
+#helper method to change date format to a standard format
 def change_date_format(date_range)
   date_array = []
   if date_range.include?("-")
@@ -76,17 +87,20 @@ def change_date_format(date_range)
       stored_hashes = []
       @laser_events = []
 
+      #find date
       laser_fridays.css("div.centering-container p.subtitle1").each do |find_date|
         laser_date = find_date.text
         arrayed_dates << change_date_format(laser_date)
       end
 
+      #find event name and url
       laser_fridays.css("div.centering-container h2").each do |find_detail|
           event_hash = {:event_name => "Laser Fridays",
             :url => find_detail.css("a").attribute("href").value}
           stored_hashes << event_hash
       end
 
+      #put date with event name and url together
       i = 0
       while i < arrayed_dates.length
         stored_hashes[i][:date] = arrayed_dates[i]
@@ -97,10 +111,11 @@ def change_date_format(date_range)
       @laser_events << stored_hashes
       @laser_events.flatten
       puts @laser_events
-
       #puts events for now, later print/return events in another method after date changed
       #puts @@events
     end
+
+
 
 
 end
