@@ -7,7 +7,7 @@ require_relative '../lib/miami_venues'
 
 
 #basic call to cli class to check if setup correct
-
+#
 x = MiamiVenues::CLI.new
 x.start
 
