@@ -21,12 +21,15 @@ class MiamiVenues::CLI
     if user_choice == "1"
       today = Time.new
       format_today = today.strftime('%a %d %b %Y')
-      
+
       puts format_today
 
       puts "Here are today's events: "
       #some method from eventmatch.rb to match
     elsif user_choice == "2"
+      puts "Enter your date"
+      user_date = gets.strip
+      puts user_date.class
       puts "Here are events of that day: "
     else
       puts "That is not an option, try again."
@@ -40,6 +43,9 @@ class MiamiVenues::CLI
 
     #example of calling scraper method within here:
     #MiamiVenues::Scraper.scrape
+  end
+
+  def match_user_date(date)
   end
 
 
