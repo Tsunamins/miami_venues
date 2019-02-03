@@ -6,7 +6,14 @@
 require_relative '../lib/miami_venues'
 
 
-#basic call to cli class to check if setup correct
+y = MiamiVenues::Scraper.new
+y.perez_art_list
 
-x = MiamiVenues::CLI.new
-x.start
+z = MiamiVenues::Scraper.new
+z.sci_museum_laser_fridays
+
+i = MiamiVenues::Scraper.new
+i.laser_date
+
+j = MiamiVenues::Scraper.new
+j.laser_url

@@ -10,9 +10,3 @@ require_relative '../lib/miami_venues'
 #
 x = MiamiVenues::CLI.new
 x.start
-
-y = MiamiVenues::Scraper.new
-y.perez_art_list
-
-z = MiamiVenues::Scraper.new
-z.sci_museum_laser_fridays
