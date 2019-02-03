@@ -7,10 +7,10 @@ require 'date'
 
 
 class MiamiVenues::Scraper
-          attr_accessor :perez_events, :laser_events
+          attr_accessor
 
 def perez_art_list
-  @perez_events = []
+  perez_events = []
   event_hash = {}
   perez_a = Nokogiri::HTML(open("https://www.pamm.org/calendar"))
 
@@ -20,17 +20,17 @@ def perez_art_list
     event_hash = {:event_name => find_detail.css("h4").text,
       :date => change_date_format(indiv_date),
       :url => find_detail.css("a").attribute("href").value}
-      @perez_events << event_hash
+      perez_events << event_hash
   end
 
   i = 0
   #standardize web url
-  while i < @perez_events.length
-    @perez_events[i][:url].prepend("https://www.pamm.org")
+  while i < perez_events.length
+    perez_events[i][:url].prepend("https://www.pamm.org")
     i += 1
   end
 
-  return @perez_events
+  return perez_events
 
 end
 
@@ -74,7 +74,7 @@ def change_date_format(date_range)
       laser_date = ""
       arrayed_dates = []
       stored_hashes = []
-      @laser_events = []
+      laser_events = []
 
       #find date
       laser_fridays.css("div.centering-container p.subtitle1").each do |find_date|
@@ -96,10 +96,15 @@ def change_date_format(date_range)
         i += 1
       end
 
-      @laser_events << stored_hashes
-      @laser_events.flatten
-      return @laser_events
+      laser_events << stored_hashes
+      laser_events.flatten
+      return laser_events
     end
+
+
+
+
+
 
 
 
