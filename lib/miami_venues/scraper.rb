@@ -7,7 +7,7 @@ require 'date'
 
 
 class MiamiVenues::Scraper
-          attr_accessor
+
 
 def self.perez_art_list
   perez_events = []
@@ -72,33 +72,59 @@ def self.change_date_format(date_range)
       arrayed_dates = []
       stored_hashes = []
       laser_events = []
-
       #find date
       laser_fridays.css("div.centering-container p.subtitle1").each do |find_date|
         laser_date = find_date.text
         arrayed_dates << self.change_date_format(laser_date)
       end
-
       #find event name and url
       laser_fridays.css("div.centering-container h2").each do |find_detail|
           event_hash = {:event_name => "Laser Fridays",
             :url => find_detail.css("a").attribute("href").value}
           stored_hashes << event_hash
       end
-
       #put date with event name and url together
       i = 0
       while i < arrayed_dates.length
         stored_hashes[i][:date] = arrayed_dates[i]
         i += 1
       end
-
+      #flatten the laser since it had one too many arrays
       laser_events << stored_hashes
       flat_laser = laser_events.flatten
-      
       return flat_laser
 
     end
+
+    def self.scrape_the_details(event_url)
+      event_details = Nokogiri::HTML(open(event_url))
+      details_hash = {}
+      if event_url.include?('frost')
+        description = event_details.css("p.body_text2").text
+        details_hash[:description] = description[0..717]
+        details_hash[:laser_theme_times] = event_details.css("span.body_text2").collect do |each_theme|
+          each_theme.text
+        end
+      elsif event_url.include?('calendar') == true
+        details_hash[:description] = event_details.css("div.inner p").text
+        time_display = event_details.css("span.date-display-single").text
+          if time_display == ""
+            details_hash[:time] = "Regular museum hours"
+
+          else
+            details_hash[:time] = time_display
+      end
+      elsif event_url.include?('calendar') == false
+        description = event_details.css("div.field-item.even p").text
+        details_hash[:description] = description[0..1500]
+          binding.pry
+        details_hash[:time] = "Regular museum hours"
+
+      end
+    end
+
+
+
 
 
 
