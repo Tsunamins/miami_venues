@@ -27,7 +27,9 @@ class MiamiVenues::CLI
       puts "Which event would you like more information about?"
       user_event_input = gets.strip
       user_event_choice = format_user_input(user_event_input)
-
+      event_match_url = match_up(chosen_date)
+      chosen_event(user_event_choice, event_match_url)
+      choose_another
 
 
     elsif user_choice == 1
@@ -41,7 +43,9 @@ class MiamiVenues::CLI
       puts "Which event would you like more information about?"
       user_event_input = gets.strip
       user_event_choice = format_user_input(user_event_input)
-
+      event_match_url = match_up(chosen_date)
+      chosen_event(user_event_choice, event_match_url)
+      choose_another
     else
       puts "That is not an option, try again."
       start
@@ -50,20 +54,16 @@ class MiamiVenues::CLI
 
 
 
-def chosen_event(user_event_choice)
-  event_match = match_up(chosen_date)
-  event_match[user_event_choice] #this will isolate the url
-  #here will use this (above) in a call to the next scraper method/step
-
+def chosen_event(user_event_choice, match_url)
+  url = match_url[user_event_choice]
+  detailed_view = MiamiVenues::Scraper.scrape_the_details(url)
+  description = detailed_view[:description]
+  times = detailed_view[:time]
+  puts "Time event is occuring: #{times}"
+  puts "Description of the event: #{description}"
 end
 
-
-
-
-
-
-
-  def match_up(chosen_date)
+def match_up(chosen_date)
     #needs to be present or called at some point
     find_current_events
     counter = 1
@@ -78,21 +78,18 @@ end
           if find_in_array == chosen_date
             counter += 1
             puts "#{counter}) #{search_events.event}, #{find_in_array}"
-            event_match << search_events.url
+            solo_url = search_events.url
+            event_match << solo_url
           end
         end
       elsif search_events.date == chosen_date
         puts "#{counter}) #{search_events.event}, #{search_events.date}"
-        event_match << search_events.url
+        solo_url = search_events.url
+        event_match << solo_url
       end
       end
       return event_match
   end
-
-
-
-
-
 
   #find and create events based on scraper and event classes
   def find_current_events
@@ -102,15 +99,6 @@ end
     MiamiVenues::Events.from_scraped_page(current_art)
   end
 
-  def display_all
-    #need this line for the moment the way testconsole is setup
-    find_current_events
-    puts "All Events:"
-    MiamiVenues::Events.all.each_with_index do |list_details, index|
-      display_index = index + 1
-      puts "#{display_index}) #{list_details.event}"
-    end
-  end
 
   #helper method to change date
   def change_user_date(input_date)
@@ -125,5 +113,20 @@ end
     modified_input = user_input.to_i - 1
 
     return modified_input
+  end
+end
+
+def choose_another
+  puts "Would you like to find another event?"
+  puts "1 for yes or 2 for no"
+  input = gets.strip
+  changed_input = format_user_input(input)
+  if changed_input == 0
+    start
+  elsif changed_input == 1
+    exit
+  else
+    "That is an invalid choice, try again"
+    choose_another
   end
 end
