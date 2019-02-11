@@ -18,14 +18,19 @@ class MiamiVenues::CLI
     user_input = gets.strip
     user_choice = format_user_input(user_input)
 
-    if user_choice == "1"
+    if user_choice == 0
       today = Time.new
       todays_date = today.strftime('%a %d %b %Y')
 
       puts "Here are today's events: "
       match_up(todays_date)
+      puts "Which event would you like more information about?"
+      user_event_input = gets.strip
+      user_event_choice = format_user_input(user_event_input)
 
-    elsif user_choice == "2"
+
+
+    elsif user_choice == 1
       puts "Enter your date"
       puts "use a format such as: 2/15/2019, feb 15 2019, february 15, 2019"
       user_date = gets.strip
@@ -33,11 +38,28 @@ class MiamiVenues::CLI
 
       puts "Here are events of that day: "
       match_up(chosen_date)
+      puts "Which event would you like more information about?"
+      user_event_input = gets.strip
+      user_event_choice = format_user_input(user_event_input)
+
     else
       puts "That is not an option, try again."
       start
     end
   end
+
+
+
+def chosen_event(user_event_choice)
+  event_match = match_up(chosen_date)
+  event_match[user_event_choice] #this will isolate the url
+  #here will use this (above) in a call to the next scraper method/step
+
+end
+
+
+
+
 
 
 
@@ -56,17 +78,15 @@ class MiamiVenues::CLI
           if find_in_array == chosen_date
             counter += 1
             puts "#{counter}) #{search_events.event}, #{find_in_array}"
-            event_match << self
+            event_match << search_events.url
           end
         end
       elsif search_events.date == chosen_date
         puts "#{counter}) #{search_events.event}, #{search_events.date}"
-        event_match << self
+        event_match << search_events.url
       end
-
       end
       return event_match
-
   end
 
 
@@ -101,7 +121,9 @@ class MiamiVenues::CLI
 
   #helper method to change user input as needed
   def format_user_input(user_input)
-    user_string = user_input.to_s
-    return user_string
+
+    modified_input = user_input.to_i - 1
+
+    return modified_input
   end
 end
