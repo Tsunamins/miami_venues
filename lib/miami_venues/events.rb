@@ -9,20 +9,28 @@ class MiamiVenues::Events
 @@all = []
 
 def initialize(hash)
+
   @event = hash[:event_name]
   @date = hash[:date]
   @url = hash[:url]
-  @@all << self
+
+  #@@all << self
 end
 
-def self.scraped_page(scraped_array)
+def self.from_scraped_page(scraped_array)
+
   scraped_array.each do |new_event|
-    @@all << self.new(new_event)
+    self.new(new_event).save
   end
 end
 
 def self.all
+
   @@all
+end
+
+def save
+  self.class.all << self
 end
 
 
