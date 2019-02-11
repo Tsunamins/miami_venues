@@ -20,23 +20,56 @@ class MiamiVenues::CLI
 
     if user_choice == "1"
       today = Time.new
-      format_today = today.strftime('%a %d %b %Y')
-
-      puts format_today
+      todays_date = today.strftime('%a %d %b %Y')
 
       puts "Here are today's events: "
+      match_up(todays_date)
 
     elsif user_choice == "2"
       puts "Enter your date"
       puts "use a format such as: 2/15/2019, feb 15 2019, february 15, 2019"
       user_date = gets.strip
-      change_user_date(user_date)
+      chosen_date = change_user_date(user_date)
+
       puts "Here are events of that day: "
+      match_up(chosen_date)
     else
       puts "That is not an option, try again."
       start
     end
   end
+
+
+
+  def match_up(chosen_date)
+    #needs to be present or called at some point
+    find_current_events
+    event_match = []
+    MiamiVenues::Events.all.each_with_index do |search_events|
+
+      search_events.date
+      if search_events.date.is_a?(Array)
+
+        series_of_dates = search_events.date
+        series_of_dates.each do |find_in_array|
+          if find_in_array == chosen_date
+            puts "#{search_events.event}, #{find_in_array}"
+            event_match << self
+          end
+        end
+      elsif search_events.date == chosen_date
+        puts "#{search_events.event}, #{search_events.date}"
+        event_match << self
+      end
+      end
+
+      return event_match
+
+  end
+
+  # def display_matches
+  #   event_list = match_up(chosen_date)
+  #   event_list.each_with_index do |display, index|
 
 
 
@@ -50,11 +83,9 @@ class MiamiVenues::CLI
     MiamiVenues::Events.from_scraped_page(current_art)
   end
 
-
   def display_all
     #need this line for the moment the way testconsole is setup
     find_current_events
-
     puts "All Events:"
     MiamiVenues::Events.all.each_with_index do |list_details, index|
       display_index = index + 1
@@ -66,7 +97,7 @@ class MiamiVenues::CLI
   def change_user_date(input_date)
     parsed_date = DateTime.parse("#{input_date}")
     use_date = parsed_date.strftime('%a %d %b %Y')
-    puts use_date
+    return use_date
   end
 
   #helper method to change user input as needed
