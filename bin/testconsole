@@ -20,6 +20,10 @@ require_relative '../lib/miami_venues'
 i = MiamiVenues::CLI.new
 i.display_all
 
+mock_date = "Fri 15 Feb 2019"
+j = MiamiVenues::CLI.new
+j.match_up(mock_date)
+
 
 
 #mock hash
