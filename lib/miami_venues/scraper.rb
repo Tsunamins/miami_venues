@@ -7,8 +7,7 @@ require 'date'
 
 
 class MiamiVenues::Scraper
-
-
+        
 def self.perez_art_list
   perez_events = []
   event_hash = {}
@@ -102,7 +101,7 @@ def self.change_date_format(date_range)
       if event_url.include?('frost')
         description = event_details.css("p.body_text2").text
         details_hash[:description] = description[0..717]
-        details_hash[:laser_theme_times] = event_details.css("span.body_text2").collect do |each_theme|
+        details_hash[:time] = event_details.css("span.body_text2").collect do |each_theme|
           each_theme.text
         end
       elsif event_url.include?('calendar') == true
@@ -117,23 +116,12 @@ def self.change_date_format(date_range)
       elsif event_url.include?('calendar') == false
         description = event_details.css("div.field-item.even p").text
         details_hash[:description] = description[0..1500]
-          binding.pry
+
         details_hash[:time] = "Regular museum hours"
 
       end
+      return details_hash
     end
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 end
