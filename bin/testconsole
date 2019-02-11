@@ -5,15 +5,25 @@
 
 require_relative '../lib/miami_venues'
 
+#these were to make sure individual bits of code were working
 
-y = MiamiVenues::Scraper.new
-y.perez_art_list
+# y = MiamiVenues::Scraper.perez_art_list
+# puts y
+#
+#
+# z = MiamiVenues::Scraper.sci_museum_laser_fridays
+# puts z
 
-z = MiamiVenues::Scraper.new
-z.sci_museum_laser_fridays
+# k = MiamiVenues::CLI.new
+# puts k.find_current_events
 
-i = MiamiVenues::Scraper.new
-i.laser_date
+i = MiamiVenues::CLI.new
+i.display_all
 
-j = MiamiVenues::Scraper.new
-j.laser_url
+
+
+#mock hash
+# mock_array = [{:event_name => "Cat's Day", :date => "5/7/2019", :url => "www.google.com"}, {:event_name => "Dog's Day", :date => "5/8/2019", :url => "www.linkedin.com"}]
+# mock_hash = {:event_name => "Cat's Day", :date => "5/7/2019", :url => "www.google.com"}
+# x = MiamiVenues::Events.from_scraped_page(mock_array)
+# puts x
