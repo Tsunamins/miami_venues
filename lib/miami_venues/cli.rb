@@ -27,7 +27,7 @@ class MiamiVenues::CLI
       puts "Which event would you like more information about?"
       user_event_input = gets.strip
       user_event_choice = format_user_input(user_event_input)
-      event_match_url = match_up(chosen_date)
+      event_match_url = match_up(todays_date)
       chosen_event(user_event_choice, event_match_url)
       choose_another
 
@@ -76,13 +76,23 @@ def match_up(chosen_date)
         series_of_dates = search_events.date
         series_of_dates.each do |find_in_array|
           if find_in_array == chosen_date
-            counter += 1
+            if counter == 1
+              counter = 1
+            elsif counter != 1
+            counter +=1
+          end
             puts "#{counter}) #{search_events.event}, #{find_in_array}"
             solo_url = search_events.url
             event_match << solo_url
+
           end
         end
       elsif search_events.date == chosen_date
+        if counter == 1
+          counter = 1
+        elsif counter != 1
+        counter +=1
+      end
         puts "#{counter}) #{search_events.event}, #{search_events.date}"
         solo_url = search_events.url
         event_match << solo_url
@@ -109,9 +119,7 @@ def match_up(chosen_date)
 
   #helper method to change user input as needed
   def format_user_input(user_input)
-
     modified_input = user_input.to_i - 1
-
     return modified_input
   end
 end
