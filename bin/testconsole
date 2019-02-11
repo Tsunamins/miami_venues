@@ -11,18 +11,5 @@ require_relative '../lib/miami_venues'
 # puts y
 #
 #
-# z = MiamiVenues::Scraper.sci_museum_laser_fridays
-# puts z
-
-# k = MiamiVenues::CLI.new
-# puts k.find_current_events
-
-# i = MiamiVenues::CLI.new
-# i.display_all
-#
-# mock_date = "Fri 15 Feb 2019"
-# j = MiamiVenues::CLI.new
-# j.match_up(mock_date)
-
-x = MiamiVenues::CLI.new
-x.display_matches
+url = "https://www.pamm.org/ar"
+ z = MiamiVenues::Scraper.scrape_the_details(url)
