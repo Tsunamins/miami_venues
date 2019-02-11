@@ -44,6 +44,7 @@ class MiamiVenues::CLI
   def match_up(chosen_date)
     #needs to be present or called at some point
     find_current_events
+    counter = 1
     event_match = []
     MiamiVenues::Events.all.each_with_index do |search_events|
 
@@ -53,23 +54,21 @@ class MiamiVenues::CLI
         series_of_dates = search_events.date
         series_of_dates.each do |find_in_array|
           if find_in_array == chosen_date
-            puts "#{search_events.event}, #{find_in_array}"
+            counter += 1
+            puts "#{counter}) #{search_events.event}, #{find_in_array}"
             event_match << self
           end
         end
       elsif search_events.date == chosen_date
-        puts "#{search_events.event}, #{search_events.date}"
+        puts "#{counter}) #{search_events.event}, #{search_events.date}"
         event_match << self
       end
-      end
 
+      end
       return event_match
 
   end
 
-  # def display_matches
-  #   event_list = match_up(chosen_date)
-  #   event_list.each_with_index do |display, index|
 
 
 
