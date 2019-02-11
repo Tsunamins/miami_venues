@@ -8,9 +8,15 @@ require 'nokogiri'
 require 'date'
 
 class MiamiVenues::CLI
+        attr_accessor :event_match
 
-  #code to see if all is setup correctly
-  #called in bin findjobs to initially check
+  def find_current_events
+    current_laser = MiamiVenues::Scraper.sci_museum_laser_fridays
+    MiamiVenues::Events.from_scraped_page(current_laser)
+    current_art = MiamiVenues::Scraper.perez_art_list
+    MiamiVenues::Events.from_scraped_page(current_art)
+  end
+
   def start
     puts "Hello"
     puts "Do you want to find something to do in Miami today or another day?"
@@ -27,8 +33,7 @@ class MiamiVenues::CLI
       puts "Which event would you like more information about?"
       user_event_input = gets.strip
       user_event_choice = format_user_input(user_event_input)
-      event_match_url = match_up(todays_date)
-      chosen_event(user_event_choice, event_match_url)
+      chosen_event(user_event_choice, @event_match)
       choose_another
 
 
@@ -37,20 +42,52 @@ class MiamiVenues::CLI
       puts "use a format such as: 2/15/2019, feb 15 2019, february 15, 2019"
       user_date = gets.strip
       chosen_date = change_user_date(user_date)
-
       puts "Here are events of that day: "
       match_up(chosen_date)
       puts "Which event would you like more information about?"
       user_event_input = gets.strip
       user_event_choice = format_user_input(user_event_input)
-      event_match_url = match_up(chosen_date)
-      chosen_event(user_event_choice, event_match_url)
+      chosen_event(user_event_choice, @event_match)
       choose_another
     else
       puts "That is not an option, try again."
       start
     end
   end
+
+
+
+  def match_up(chosen_date)
+      #needs to be present or called at some point
+      find_current_events
+      counter = 0
+      @event_match = []
+      MiamiVenues::Events.all.each_with_index do |search_events|
+
+        search_events.date
+        if search_events.date.is_a?(Array)
+
+          series_of_dates = search_events.date
+          series_of_dates.each do |find_in_array|
+            if find_in_array == chosen_date
+              counter += 1
+
+              puts "#{counter}) #{search_events.event}, #{find_in_array}"
+              solo_url = search_events.url
+              @event_match << solo_url
+
+            end
+          end
+        elsif search_events.date == chosen_date
+          counter += 1
+
+          puts "#{counter}) #{search_events.event}, #{search_events.date}"
+          solo_url = search_events.url
+          @event_match << solo_url
+        end
+        end
+        return @event_match
+    end
 
 
 
@@ -63,53 +100,6 @@ def chosen_event(user_event_choice, match_url)
   puts "Description of the event: #{description}"
 end
 
-def match_up(chosen_date)
-    #needs to be present or called at some point
-    find_current_events
-    counter = 1
-    event_match = []
-    MiamiVenues::Events.all.each_with_index do |search_events|
-
-      search_events.date
-      if search_events.date.is_a?(Array)
-
-        series_of_dates = search_events.date
-        series_of_dates.each do |find_in_array|
-          if find_in_array == chosen_date
-            if counter == 1
-              counter = 1
-            elsif counter != 1
-            counter +=1
-          end
-            puts "#{counter}) #{search_events.event}, #{find_in_array}"
-            solo_url = search_events.url
-            event_match << solo_url
-
-          end
-        end
-      elsif search_events.date == chosen_date
-        if counter == 1
-          counter = 1
-        elsif counter != 1
-        counter +=1
-      end
-        puts "#{counter}) #{search_events.event}, #{search_events.date}"
-        solo_url = search_events.url
-        event_match << solo_url
-      end
-      end
-      return event_match
-  end
-
-  #find and create events based on scraper and event classes
-  def find_current_events
-    current_laser = MiamiVenues::Scraper.sci_museum_laser_fridays
-    MiamiVenues::Events.from_scraped_page(current_laser)
-    current_art = MiamiVenues::Scraper.perez_art_list
-    MiamiVenues::Events.from_scraped_page(current_art)
-  end
-
-
   #helper method to change date
   def change_user_date(input_date)
     parsed_date = DateTime.parse("#{input_date}")
@@ -119,6 +109,7 @@ def match_up(chosen_date)
 
   #helper method to change user input as needed
   def format_user_input(user_input)
+
     modified_input = user_input.to_i - 1
     return modified_input
   end
