@@ -17,17 +17,12 @@ require_relative '../lib/miami_venues'
 # k = MiamiVenues::CLI.new
 # puts k.find_current_events
 
-i = MiamiVenues::CLI.new
-i.display_all
+# i = MiamiVenues::CLI.new
+# i.display_all
+#
+# mock_date = "Fri 15 Feb 2019"
+# j = MiamiVenues::CLI.new
+# j.match_up(mock_date)
 
-mock_date = "Fri 15 Feb 2019"
-j = MiamiVenues::CLI.new
-j.match_up(mock_date)
-
-
-
-#mock hash
-# mock_array = [{:event_name => "Cat's Day", :date => "5/7/2019", :url => "www.google.com"}, {:event_name => "Dog's Day", :date => "5/8/2019", :url => "www.linkedin.com"}]
-# mock_hash = {:event_name => "Cat's Day", :date => "5/7/2019", :url => "www.google.com"}
-# x = MiamiVenues::Events.from_scraped_page(mock_array)
-# puts x
+x = MiamiVenues::CLI.new
+x.display_matches
