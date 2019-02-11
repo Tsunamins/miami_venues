@@ -43,7 +43,6 @@ class MiamiVenues::CLI
 
 
   #find and create events based on scraper and event classes
-
   def find_current_events
     current_laser = MiamiVenues::Scraper.sci_museum_laser_fridays
     MiamiVenues::Events.from_scraped_page(current_laser)
@@ -51,23 +50,16 @@ class MiamiVenues::CLI
     MiamiVenues::Events.from_scraped_page(current_art)
   end
 
-  # def find_current_laser
-  #   current_laser = MiamiVenues::Scraper.sci_museum_laser_fridays
-  #   MiamiVenues::Events.from_scraped_page(current_laser)
-  #
-  # end
-  #
-  # def find_current_art
-  #   current_art = MiamiVenues::Scraper.perez_art_list
-  #   MiamiVenues::Events.from_scraped_page(current_art)
-  # end
 
   def display_all
-    # find_current_art
-    # find_current_laser
+    #need this line for the moment the way testconsole is setup
     find_current_events
-    all_events = MiamiVenues::Events.all
-    puts all_events
+
+    puts "All Events:"
+    MiamiVenues::Events.all.each_with_index do |list_details, index|
+      display_index = index + 1
+      puts "#{display_index}) #{list_details.event}"
+    end
   end
 
   #helper method to change date
