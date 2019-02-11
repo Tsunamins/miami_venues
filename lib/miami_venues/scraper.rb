@@ -9,7 +9,7 @@ require 'date'
 class MiamiVenues::Scraper
           attr_accessor
 
-def perez_art_list
+def self.perez_art_list
   perez_events = []
   event_hash = {}
   perez_a = Nokogiri::HTML(open("https://www.pamm.org/calendar"))
@@ -18,25 +18,22 @@ def perez_art_list
   perez_a.css("li div.inner").each do |find_detail|
     indiv_date = find_detail.css("span.meta").text
     event_hash = {:event_name => find_detail.css("h4").text,
-      :date => change_date_format(indiv_date),
+      :date => self.change_date_format(indiv_date),
       :url => find_detail.css("a").attribute("href").value}
       perez_events << event_hash
   end
-
   i = 0
   #standardize web url
   while i < perez_events.length
     perez_events[i][:url].prepend("https://www.pamm.org")
     i += 1
   end
-
   return perez_events
-
 end
 
 
 #helper method to change date format to a standard format
-def change_date_format(date_range)
+def self.change_date_format(date_range)
   date_array = []
   if date_range.include?("-")
     arrayed_date = date_range.split("-")
@@ -68,7 +65,7 @@ def change_date_format(date_range)
 
 
 
-  def sci_museum_laser_fridays
+  def self.sci_museum_laser_fridays
       laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
       event_hash = {:event_name => "", :date => "", :url => ""}
       laser_date = ""
@@ -79,7 +76,7 @@ def change_date_format(date_range)
       #find date
       laser_fridays.css("div.centering-container p.subtitle1").each do |find_date|
         laser_date = find_date.text
-        arrayed_dates << change_date_format(laser_date)
+        arrayed_dates << self.change_date_format(laser_date)
       end
 
       #find event name and url
@@ -97,8 +94,10 @@ def change_date_format(date_range)
       end
 
       laser_events << stored_hashes
-      laser_events.flatten
-      return laser_events
+      flat_laser = laser_events.flatten
+      
+      return flat_laser
+
     end
 
 
