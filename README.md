@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-run findevents
+run bin/ruby findevents
 Select option 1 to find events today, select option 2 to find events on a different day.  Note, that, the program currently only scrapes 2 pages, so may need to specify a date to view full effects of program.
 
 After selecting the date, choose from the list number to see a more detailed view.
