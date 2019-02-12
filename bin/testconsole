@@ -7,9 +7,8 @@ require_relative '../lib/miami_venues'
 
 #these were to make sure individual bits of code were working
 
-# y = MiamiVenues::Scraper.perez_art_list
-# puts y
-#
-#
-url = "https://www.pamm.org/ar"
- z = MiamiVenues::Scraper.scrape_the_details(url)
+# x = MiamiVenues::CLI.new
+# x.display_all_art
+
+y = MiamiVenues::Scraper.perez_art_list
+puts y
