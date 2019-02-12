@@ -7,7 +7,7 @@ require 'date'
 
 
 class MiamiVenues::Scraper
-        
+
 def self.perez_art_list
   perez_events = []
   event_hash = {}
@@ -15,10 +15,13 @@ def self.perez_art_list
 
   #find title of event, dates and url
   perez_a.css("li div.inner").each do |find_detail|
+
     indiv_date = find_detail.css("span.meta").text
+
     event_hash = {:event_name => find_detail.css("h4").text,
       :date => self.change_date_format(indiv_date),
       :url => find_detail.css("a").attribute("href").value}
+
       perez_events << event_hash
   end
   i = 0
@@ -31,36 +34,7 @@ def self.perez_art_list
 end
 
 
-#helper method to change date format to a standard format
-def self.change_date_format(date_range)
-  date_array = []
-  if date_range.include?("-")
-    arrayed_date = date_range.split("-")
-    first_day = arrayed_date[0]
-    last_day = arrayed_date[1]
-    first_day.strip!
-    last_day.strip!
-    first_day_format = DateTime.parse("#{first_day}")
 
-    last_day_format = DateTime.parse("#{last_day}")
-    all_dates = first_day_format..last_day_format
-    all_dates.to_a
-    all_dates.each do |change_format|
-      date_array << change_format.strftime('%a %d %b %Y')
-    end
-      return date_array
-    elsif date_range.include?(" at ")
-      date_only = date_range.chomp(' at 7:00 PM')
-      new_format = DateTime.parse("#{date_only}")
-      match_date_format = new_format.strftime('%a %d %b %Y')
-      return match_date_format
-    elsif
-      date_range.include?("-") == false
-      date_format = Date.parse("#{date_range}")
-      match_date_format = date_format.strftime('%a %d %b %Y')
-      return match_date_format
-    end
-  end
 
 
 
@@ -122,6 +96,34 @@ def self.change_date_format(date_range)
       end
       return details_hash
     end
+
+    #helper method to change date format to a standard format
+    def self.change_date_format(date_range)
+      date_array = []
+      if date_range.include?(' - ') || date_range.include?('.')
+        arrayed_date = date_range.split(/\W[^ ,A-Z,1-9]/)
+        first_day = arrayed_date[0].strip!
+        last_day = arrayed_date[1].strip!
+        first_day_format = DateTime.parse("#{first_day}")
+        last_day_format = DateTime.parse("#{last_day}")
+        all_dates = first_day_format..last_day_format
+        all_dates.to_a
+        all_dates.each do |change_format|
+          date_array << change_format.strftime('%a %d %b %Y')
+        end
+          return date_array
+        elsif date_range.include?(" at ")
+          date_only = date_range.chomp(' at 7:00 PM')
+          date_format = DateTime.parse("#{date_only}")
+          match_date_format = date_format.strftime('%a %d %b %Y')
+          return match_date_format
+        elsif
+          date_range.include?("-") == false
+          date_format = Date.parse("#{date_range}")
+          match_date_format = date_format.strftime('%a %d %b %Y')
+          return match_date_format
+        end
+      end
 
 
 end
