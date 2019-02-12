@@ -130,15 +130,16 @@ def choose_another
   end
 end
 
-def display_all_art
-  current_art = MiamiVenues::Scraper.perez_art_list
-  MiamiVenues::Events.from_scraped_page(current_art)
+#this was for my purposes
+# def display_all_art
+#   current_art = MiamiVenues::Scraper.perez_art_list
+#   MiamiVenues::Events.from_scraped_page(current_art)
+#
+#   MiamiVenues::Events.all.each do |display|
+#     puts "#{display.event}"
+#     puts "#{display.date}"
+#     puts "#{display.url}"
+#   end
+# end
 
-  MiamiVenues::Events.all.each do |display|
-    puts "#{display.event}"
-    puts "#{display.date}"
-    puts "#{display.url}"
-  end
 end
-
-end 
