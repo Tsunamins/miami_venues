@@ -113,7 +113,7 @@ end
     modified_input = user_input.to_i - 1
     return modified_input
   end
-end
+
 
 def choose_another
   puts "Would you like to find another event?"
@@ -129,3 +129,16 @@ def choose_another
     choose_another
   end
 end
+
+def display_all_art
+  current_art = MiamiVenues::Scraper.perez_art_list
+  MiamiVenues::Events.from_scraped_page(current_art)
+
+  MiamiVenues::Events.all.each do |display|
+    puts "#{display.event}"
+    puts "#{display.date}"
+    puts "#{display.url}"
+  end
+end
+
+end 
