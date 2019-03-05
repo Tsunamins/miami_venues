@@ -25,16 +25,7 @@ class MiamiVenues::CLI
     user_choice = format_user_input(user_input)
 
     if user_choice == 0
-      today = Time.new
-      todays_date = today.strftime('%a %d %b %Y')
-
-      puts "Here are today's events: "
-      match_up(todays_date)
-      puts "Which event would you like more information about?"
-      user_event_input = gets.strip
-      user_event_choice = format_user_input(user_event_input)
-      chosen_event(user_event_choice, @event_match)
-      choose_another
+      todays_events
 
 
     elsif user_choice == 1
@@ -144,9 +135,10 @@ def todays_events
   match_up(todays_date)
   puts "Which event would you like more information about?"
   user_event_input = gets.strip
-  user_even = format_user_input(user_event_input)
+  user_event_choice = format_user_input(user_event_input)
   chosen_event(user_event_choice, @event_match)
   choose_another
+
 end
 
 
