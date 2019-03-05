@@ -8,16 +8,17 @@ require 'nokogiri'
 require 'date'
 
 class MiamiVenues::CLI
-        attr_accessor :event_match, :today
+        attr_accessor :event_match, :current_art, :current_laser
 
   def find_current_events
-    current_laser = MiamiVenues::Scraper.sci_museum_laser_fridays
+    @current_laser = MiamiVenues::Scraper.sci_museum_laser_fridays
     MiamiVenues::Events.from_scraped_page(current_laser)
-    current_art = MiamiVenues::Scraper.perez_art_list
+    @current_art = MiamiVenues::Scraper.perez_art_list
     MiamiVenues::Events.from_scraped_page(current_art)
   end
 
   def start
+    find_current_events
     puts "Hello"
     puts "Do you want to find something to do in Miami today or another day?"
     puts "Enter 1 for today, enter 2 for another day: "
@@ -42,7 +43,7 @@ class MiamiVenues::CLI
 
   def match_up(chosen_date)
       #needs to be present or called at some point
-      find_current_events
+      #find_current_events
       counter = 0
       @event_match = []
       MiamiVenues::Events.all.each_with_index do |search_events|
@@ -104,7 +105,18 @@ def choose_another
   input = gets.strip
   changed_input = format_user_input(input)
   if changed_input == 0
-    start
+    puts "Do you want to look at today's events, or an alternate day?"
+    puts "Enter 1 for today or 2 for an alternate day."
+    next_input = gets.strip
+    next_choice = format_user_input(next_input)
+    if next_choice == 0
+      todays_events
+      choose_another
+    elsif next_choice == 1
+      alternate_date
+      choose_another
+    end
+
   elsif changed_input == 1
     exit
   else
@@ -119,6 +131,7 @@ def todays_events
 
   puts "Here are today's events: "
   match_up(todays_date)
+
 
   more_info
 end
