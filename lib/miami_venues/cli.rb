@@ -70,7 +70,7 @@ class MiamiVenues::CLI
           @event_match << solo_url
         end
         end
-        return @event_match
+        @event_match
     end
 
 
@@ -88,14 +88,14 @@ end
   def change_user_date(input_date)
     parsed_date = DateTime.parse("#{input_date}")
     use_date = parsed_date.strftime('%a %d %b %Y')
-    return use_date
+    use_date
   end
 
   #helper method to change user input as needed
   def format_user_input(user_input)
 
     modified_input = user_input.to_i - 1
-    return modified_input
+    modified_input
   end
 
 

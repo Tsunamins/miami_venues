@@ -30,7 +30,7 @@ def self.perez_art_list
     perez_events[i][:url].prepend("https://www.pamm.org")
     i += 1
   end
-  return perez_events
+  perez_events
 end
 
 
@@ -65,7 +65,7 @@ end
       #flatten the laser since it had one too many arrays
       laser_events << stored_hashes
       flat_laser = laser_events.flatten
-      return flat_laser
+      flat_laser
 
     end
 
@@ -94,7 +94,7 @@ end
         details_hash[:time] = "Regular museum hours"
 
       end
-      return details_hash
+      details_hash
     end
 
     #helper method to change date format to a standard format
@@ -111,17 +111,17 @@ end
         all_dates.each do |change_format|
           date_array << change_format.strftime('%a %d %b %Y')
         end
-          return date_array
+          date_array
         elsif date_range.include?(" at ")
           date_only = date_range.chomp(' at 7:00 PM')
           date_format = DateTime.parse("#{date_only}")
           match_date_format = date_format.strftime('%a %d %b %Y')
-          return match_date_format
+          match_date_format
         elsif
           date_range.include?("-") == false
           date_format = Date.parse("#{date_range}")
           match_date_format = date_format.strftime('%a %d %b %Y')
-          return match_date_format
+          match_date_format
         end
       end
 
