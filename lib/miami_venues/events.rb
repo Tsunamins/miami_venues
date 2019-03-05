@@ -4,33 +4,28 @@ require 'nokogiri'
 require 'date'
 
 class MiamiVenues::Events
-            attr_accessor :event, :url, :date
+    attr_accessor :event, :url, :date
 
-@@all = []
+    @@all = []
 
-def initialize(hash)
+    def initialize(hash)
+      @event = hash[:event_name]
+      @date = hash[:date]
+      @url = hash[:url]
+    end
 
-  @event = hash[:event_name]
-  @date = hash[:date]
-  @url = hash[:url]
+    def self.from_scraped_page(scraped_array)
+      scraped_array.each do |new_event|
+        self.new(new_event).save
+      end
+    end
 
-  #@@all << self
-end
+    def self.all
+      @@all
+    end
 
-def self.from_scraped_page(scraped_array)
-
-  scraped_array.each do |new_event|
-    self.new(new_event).save
-  end
-end
-
-def self.all
-
-  @@all
-end
-
-def save
-  self.class.all << self
-end
+    def save
+      self.class.all << self
+    end
 
 end

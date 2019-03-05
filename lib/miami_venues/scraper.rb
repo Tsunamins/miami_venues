@@ -3,40 +3,28 @@ require 'pry'
 require 'nokogiri'
 require 'date'
 
-
-
-
 class MiamiVenues::Scraper
 
-def self.perez_art_list
-  perez_events = []
-  event_hash = {}
-  perez_a = Nokogiri::HTML(open("https://www.pamm.org/calendar"))
-
-  #find title of event, dates and url
-  perez_a.css("li div.inner").each do |find_detail|
-
-    indiv_date = find_detail.css("span.meta").text
-
-    event_hash = {:event_name => find_detail.css("h4").text,
+  def self.perez_art_list
+    perez_events = []
+    event_hash = {}
+    perez_a = Nokogiri::HTML(open("https://www.pamm.org/calendar"))
+    #find title of event, dates and url
+    perez_a.css("li div.inner").each do |find_detail|
+      indiv_date = find_detail.css("span.meta").text
+      event_hash = {:event_name => find_detail.css("h4").text,
       :date => self.change_date_format(indiv_date),
       :url => find_detail.css("a").attribute("href").value}
-
       perez_events << event_hash
-  end
-  i = 0
-  #standardize web url
-  while i < perez_events.length
+    end
+    i = 0
+    #standardize web url
+    while i < perez_events.length
     perez_events[i][:url].prepend("https://www.pamm.org")
     i += 1
+    end
+    perez_events
   end
-  perez_events
-end
-
-
-
-
-
 
   def self.sci_museum_laser_fridays
       laser_fridays = Nokogiri::HTML(open("https://www.frostscience.org/exhibition/planetarium/laser-fridays/"))
@@ -66,7 +54,6 @@ end
       laser_events << stored_hashes
       flat_laser = laser_events.flatten
       flat_laser
-
     end
 
     def self.scrape_the_details(event_url)
@@ -83,16 +70,13 @@ end
         time_display = event_details.css("span.date-display-single").text
           if time_display == ""
             details_hash[:time] = "Regular museum hours"
-
           else
             details_hash[:time] = time_display
       end
       elsif event_url.include?('calendar') == false
         description = event_details.css("div.field-item.even p").text
         details_hash[:description] = description[0..1500]
-
         details_hash[:time] = "Regular museum hours"
-
       end
       details_hash
     end
@@ -124,6 +108,5 @@ end
           match_date_format
         end
       end
-
-
+      
 end
