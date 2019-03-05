@@ -29,26 +29,12 @@ class MiamiVenues::CLI
 
 
     elsif user_choice == 1
-      puts "Enter your date"
-      puts "use a format such as: 2/15/2019, feb 15 2019, february 15, 2019"
-      user_date = gets.strip
-      chosen_date = change_user_date(user_date)
-      puts "Here are events of that day: "
-      match_up(chosen_date)
-      puts "Which event would you like more information about?"
-      user_event_input = gets.strip
-      user_event_choice = format_user_input(user_event_input)
-    # if user_event_choice <= thearrayquestion.length
-
-      chosen_event(user_event_choice, @event_match)
-      choose_another
-    # else
-    #   puts "That is not a an option, try, again"
-    # end
+      alternate_date
 
     else
       puts "That is not an option, try again."
       start
+
     end
   end
 
@@ -136,6 +122,20 @@ def todays_events
 
   more_info
 end
+
+def alternate_date
+  puts "Enter your date"
+  puts "use a format such as: 2/15/2019, feb 15 2019, february 15, 2019"
+  user_date = gets.strip
+  chosen_date = change_user_date(user_date)
+  puts "Here are events of that day: "
+  match_up(chosen_date)
+
+  more_info
+
+
+end
+
 
 def more_info
   puts "Which event would you like more information about?"
