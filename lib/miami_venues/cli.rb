@@ -8,7 +8,7 @@ require 'nokogiri'
 require 'date'
 
 class MiamiVenues::CLI
-        attr_accessor :event_match
+        attr_accessor :event_match, :today
 
   def find_current_events
     current_laser = MiamiVenues::Scraper.sci_museum_laser_fridays
@@ -133,13 +133,24 @@ def todays_events
 
   puts "Here are today's events: "
   match_up(todays_date)
+
+  more_info
+end
+
+def more_info
   puts "Which event would you like more information about?"
+
   user_event_input = gets.strip
   user_event_choice = format_user_input(user_event_input)
-  chosen_event(user_event_choice, @event_match)
-  choose_another
-
+  if user_event_choice >= 0 && user_event_choice <= @event_match.length
+    chosen_event(user_event_choice, @event_match)
+    choose_another
+  else
+    puts "That is not a valid entry, try again."
+    more_info
 end
+end
+
 
 
 
