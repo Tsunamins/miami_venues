@@ -1,4 +1,5 @@
 # MiamiVenues
+This is a Ruby based CLI gem demonstating the use of Nokogiri by scraping the websites Perez Art Museum and the Frost Science Museum's Laser Fridays.  Utilizes object oriented programming concepts and class based file structure.
 
 Find something to do in Miami today by quickly checking local venues for events.  Find locations, times and descriptions.
 
@@ -20,7 +21,7 @@ Or install it yourself as:
 
 ## Usage
 
-run bin/ruby findevents
+run bin/ruby findevents in the terminal
 Select option 1 to find events today, select option 2 to find events on a different day.  Note, that, the program currently only scrapes 2 pages, so may need to specify a date to view full effects of program.
 
 After selecting the date, choose from the list number to see a more detailed view.
