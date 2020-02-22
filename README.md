@@ -1,23 +1,14 @@
 # MiamiVenues
-This is a Ruby based CLI gem demonstating the use of Nokogiri by scraping the websites Perez Art Museum and the Frost Science Museum's Laser Fridays.  Utilizes object oriented programming concepts and class based file structure.
+A Ruby based CLI gem project using Nokogiri to scrape the websites: Perez Art Museum and the Frost Science Museum's Laser Fridays.  Utilizes object oriented programming concepts and class based file structure.  Provides 2 levels of detailed views, events, followed by event descriptions.
+
+YouTube video demo: https://youtu.be/IZuhB9wp3Wo
+Blog post: https://tsunamins.github.io/cli_project_noteworthy_points
 
 Find something to do in Miami today by quickly checking local venues for events.  Find locations, times and descriptions.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'miami_venues'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install miami_venues
+Fork and clone to a local enivronment
 
 ## Usage
 
